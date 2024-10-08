@@ -27,7 +27,7 @@ export class FlowersController {
   }
 
   @Get()
-  findAll(@Query('type') type:{ type?  : string}) {
+  findAll(@Query('type') type:string) {
     return this.flowersService.findAll(type);
   }
 

@@ -1,4 +1,4 @@
-import {  Injectable, Logger } from '@nestjs/common';
+import {  Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateFlowerDto } from './dto/create-flower.dto';
 import { UpdateFlowerDto } from './dto/update-flower.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,18 +20,20 @@ export class FlowersService {
       return await this.flowersRepository.save(createFlowerDto)
   }
 
-  findAll(type: { type?: string }): Promise<Flower[]> {
-    if (type?.type)
-      return this.flowersRepository.findBy({
-        type: type.type,
+ async findAll(type:  string ): Promise<Flower[]> {
+    if (type)
+      return await this.flowersRepository.findBy({
+        type: type,
       });
-    return this.flowersRepository.find();
+    return await this.flowersRepository.find();
   }
 
   async findOne(id: number): Promise<Flower | null> {
-    return this.flowersRepository.findOne({
+    const flower =  await this.flowersRepository.findOne({
       where: { id },
     });
+    if(!flower) throw new NotFoundException(`Flower with id ${id} not found`);
+    return flower;
   }
 
   async update(id: number, updateFlowerDto: UpdateFlowerDto): Promise<Flower> {
