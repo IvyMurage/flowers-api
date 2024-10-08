@@ -5,24 +5,39 @@ export class Flower {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    unique: true,
+    type: 'varchar',
+    length: 50,
+  })
   name: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 50,
+  })
   color: string;
 
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,  
+    scale: 2,  
+  })
   price: number;
 
   @Column()
   stock: number;
 
-  @Column()
+  @Column({
+    default: true,
+  })
   onSale: boolean;
 
   @Column()
   type: string;
 
-  @Column()
+  @Column({
+    type: 'text',
+  })
   image_url: string;
 }

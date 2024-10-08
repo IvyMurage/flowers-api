@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { FlowersModule } from './flowers/flowers.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Flower } from './flowers/entities/flower.entity';
+import { APP_FILTER } from '@nestjs/core';
+import { PostgresExceptionFilter } from './postgres-exception.filter';
 
 @Module({
   imports: [
@@ -20,6 +22,12 @@ import { Flower } from './flowers/entities/flower.entity';
     FlowersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: PostgresExceptionFilter,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}

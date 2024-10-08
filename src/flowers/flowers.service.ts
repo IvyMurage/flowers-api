@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateFlowerDto } from './dto/create-flower.dto';
 import { UpdateFlowerDto } from './dto/update-flower.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,11 +12,15 @@ export class FlowersService {
     private flowersRepository: Repository<Flower>,
   ) {}
 
-  create(createFlowerDto: CreateFlowerDto): Promise<Flower> {
-    return this.flowersRepository.save(createFlowerDto);
+  async create(createFlowerDto: CreateFlowerDto): Promise<Flower> {
+      return await this.flowersRepository.save(createFlowerDto)
   }
 
-  findAll(): Promise<Flower[]> {
+  findAll(type: { type?: string }): Promise<Flower[]> {
+    if (type.type)
+      return this.flowersRepository.findBy({
+        type: type.type,
+      });
     return this.flowersRepository.find();
   }
 

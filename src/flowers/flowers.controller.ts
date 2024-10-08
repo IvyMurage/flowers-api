@@ -8,12 +8,16 @@ import {
   Delete,
   ValidationPipe,
   ParseIntPipe,
+  Query,
+  UseFilters,
 } from '@nestjs/common';
 import { FlowersService } from './flowers.service';
 import { CreateFlowerDto } from './dto/create-flower.dto';
 import { UpdateFlowerDto } from './dto/update-flower.dto';
+import { PostgresExceptionFilter } from 'src/postgres-exception.filter';
 
 @Controller('flowers')
+@UseFilters(PostgresExceptionFilter)
 export class FlowersController {
   constructor(private readonly flowersService: FlowersService) {}
 
@@ -23,8 +27,8 @@ export class FlowersController {
   }
 
   @Get()
-  findAll() {
-    return this.flowersService.findAll();
+  findAll(@Query('type') type:{ type: string}) {
+    return this.flowersService.findAll(type);
   }
 
   @Get(':id')
