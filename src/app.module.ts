@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Flower } from './flowers/entities/flower.entity';
 import { APP_FILTER } from '@nestjs/core';
 import { PostgresExceptionFilter } from './postgres-exception.filter';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PostgresExceptionFilter } from './postgres-exception.filter';
       synchronize: true,
     }),
     FlowersModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
