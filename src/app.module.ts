@@ -7,6 +7,12 @@ import { Flower } from './flowers/entities/flower.entity';
 import { APP_FILTER } from '@nestjs/core';
 import { PostgresExceptionFilter } from './postgres-exception.filter';
 import { UsersModule } from './users/users.module';
+import { AuthService } from './auth/auth.service';
+import { UsersService } from './users/users.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
+import { User } from './users/entities/user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -17,19 +23,24 @@ import { UsersModule } from './users/users.module';
       username: 'postgres',
       password: 'password',
       database: 'flowers',
-      entities: [Flower],
+      entities: [Flower, User],
       synchronize: true,
     }),
     FlowersModule,
     UsersModule,
+    AuthModule,
+
   ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [
     {
       provide: APP_FILTER,
       useClass: PostgresExceptionFilter,
     },
     AppService,
+    JwtService,
+    UsersService,
+    AuthService,
   ],
 })
 export class AppModule {}
